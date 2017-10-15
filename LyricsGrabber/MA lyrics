@@ -1,0 +1,47 @@
+#api_key=b142c98c-6e4b-4580-8de1-ac34e5be8a30
+#lyrics way - https://www.metal-archives.com/release/ajax-view-lyrics/id/72592
+import sys
+import collections
+sys.path.append("C:\\Windows\\System32")
+import requests
+import json
+from bs4 import BeautifulSoup
+import re
+
+payload = {'api_key': 'b142c98c-6e4b-4580-8de1-ac34e5be8a30'}
+
+def getAlbumFromTag(path):
+    from os import listdir
+    from os.path import isfile, join
+    onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+
+
+def getAlbumID(album):
+    query='http://em.wemakesites.net/search/album_title/'+album
+    r = requests.get(query,params=payload)
+    data=r.json()
+    album_id = data["data"]["search_results"][0]["album"]['id']
+    band_name = data["data"]["search_results"][0]["band"]["name"]
+    album_name = data["data"]["search_results"][0]["album"]["title"]
+    return album_id, band_name.replace(" ", "_"),album_name.replace(" ", "_")
+
+if __name__ == '__main__':
+    #album = getAlbumFromTag(input('please enter full path to folder:'))
+    albumID, bandName, AlbumName = getAlbumID(input())
+    print(albumID)
+    print(bandName, AlbumName)
+    page = requests.get('https://www.metal-archives.com/albums/'+bandName+'/'+AlbumName+'/'+albumID)
+    soup = BeautifulSoup(page.text, 'html.parser')
+    #print(soup.prettify())
+    s=soup.find_all(id=re.compile('(?<=song)\d+'))
+    #going to have list of songid
+    songid=[]
+    for item in s:
+        songid.append(re.search('(?<=song)\d+',str(item)).group())
+    print(songid)
+    for item in songid:
+        href = 'https://www.metal-archives.com/release/ajax-view-lyrics/id/'+item
+        page1 = requests.get(href)
+        lyr = BeautifulSoup(page1.text,'html.parser')
+        lyrics=lyr.get_text()
+        print(lyrics)
