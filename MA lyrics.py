@@ -45,7 +45,6 @@ class Album:
         songid=[]
         for item in s:
             songid.append(re.search('(?<=song)\d+',str(item)).group())
-        print(songid)
         self.lyrics_MA=dict.fromkeys(songid)
         for item in self.lyrics_MA.keys():
             page1 = requests.get('https://www.metal-archives.com/release/ajax-view-lyrics/id/'+item)
