@@ -49,11 +49,9 @@ class Album:
         for item in self.lyrics_MA.keys():
             page1 = requests.get('https://www.metal-archives.com/release/ajax-view-lyrics/id/'+item)
             self.lyrics_MA[item]=BeautifulSoup(page1.text,'html.parser').get_text()
-        print(self.lyrics_MA)
     def UpdateLyrics(self, file_paths):
         i=0
         lyrics=list(self.lyrics_MA.values())
-        print(lyrics)
         for item in file_paths:
             song=ID3(item)
             song.add(USLT(text=lyrics[i]))
