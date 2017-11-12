@@ -93,6 +93,10 @@ if __name__ == '__main__':
         except TypeError:
             print('Album %s of %s was not found, please try again' % (A.album, A.artist))
     A.GetLyricsMA()
-    ans = input("do you want to update lyrics?")
+    while True:
+        ans = input("do you want to update lyrics? y/n")
     if ans=='y':
         A.UpdateLyrics(file_paths)
+        break
+    if ans=='n':
+        break
