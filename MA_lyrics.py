@@ -12,17 +12,19 @@ from mutagen.id3 import ID3, USLT
 payload = {'api_key': 'b142c98c-6e4b-4580-8de1-ac34e5be8a30'}
 
 class Album:
-    def __init__(self,artist_tag,album_tag,tracklist):
+    def __init__(self,artist_tag, album_tag, tracklist):
         self.artist = artist_tag
         self.album = album_tag
         self.tracklist = tracklist
     def GetInfoMA(self):
         query='http://em.wemakesites.net/search/album_title/'+self.album
-        r = requests.get(query,params=payload)
-        print(self.album,self.artist)
+        r = requests.get(query, params=payload)
+        print(self.album, self.artist)
         data=r.json()
+        print(data)
         for item in data["data"]["search_results"]:
-            if bandtag.lower()==item["band"]["name"].lower() and albumtag.lower()==item["album"]["title"].lower():
+            if bandtag.lower()==item["band"]["name"].lower()\
+            and albumtag.lower()==item["album"]["title"].lower():
                 self.album_id_MA = data["data"]["search_results"][0]["album"]['id']
                 self.band_name_MA = data["data"]["search_results"][0]["band"]["name"].replace(" ", "_")
                 self.album_name_MA = data["data"]["search_results"][0]["album"]["title"].replace(" ", "_")
@@ -32,8 +34,8 @@ class Album:
         i=1
         self.tracklist_MA={}
         for item in data["data"]["album"]["songs"]:
-            self.tracklist_MA[i]=item["title"]
-            i=i+1
+             self.tracklist_MA[i]=item["title"]
+             i=i+1
         print('MA album playlist')
         print(self.tracklist_MA)
     def GetLyricsMA(self):
@@ -95,8 +97,8 @@ if __name__ == '__main__':
     A.GetLyricsMA()
     while True:
         ans = input("do you want to update lyrics? y/n")
-    if ans=='y':
-        A.UpdateLyrics(file_paths)
-        break
-    if ans=='n':
-        break
+        if ans=='y':
+            A.UpdateLyrics(file_paths)
+            break
+        if ans=='n':
+            break
