@@ -1,4 +1,3 @@
-#api_key=b142c98c-6e4b-4580-8de1-ac34e5be8a30
 #lyrics way - https://www.metal-archives.com/release/ajax-view-lyrics/id/72592
 import sys
 import collections
@@ -9,7 +8,10 @@ import re
 import os
 from mutagen.id3 import ID3, USLT
 
-payload = {'api_key': 'b142c98c-6e4b-4580-8de1-ac34e5be8a30'}
+with open('/home/mperminov/projects/MA_lyrics/restapi_creden') as f:
+    (api, value) = f.read().split()
+    payload = {}
+    payload[api] = value
 
 class Album:
     def __init__(self,artist_tag, album_tag, tracklist):
